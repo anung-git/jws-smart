@@ -11,7 +11,7 @@
 
 //#include <SPI.h>        //SPI.h must be included as DMD is written by SPI (the IDE complains otherwise)
 #include "DMD.h"        //
-#include "Arial_Black_16.h"
+#include "Arial_black_16.h"
 
 //Fire up the DMD library as dmd
 #define DISPLAYS_ACROSS 2
@@ -674,6 +674,7 @@ void baca_jadwal(int daerah ){
     data[waktu_ashar]=data[waktu_ashar]+2;
     data[waktu_magrib]=data[waktu_magrib]+2;
     data[waktu_isya]=data[waktu_isya]+2;
+    /*
     if(parameter.jadwal_fix_subuh>0)data[waktu_subuh]=parameter.jadwal_fix_subuh ;
     if(parameter.jadwal_fix_duhur>0)data[waktu_duhur]=parameter.jadwal_fix_duhur ;
     if(parameter.jadwal_fix_ashar>0)data[waktu_ashar]=parameter.jadwal_fix_ashar ;
@@ -685,6 +686,7 @@ void baca_jadwal(int daerah ){
     data[waktu_magrib]=data[waktu_magrib]+parameter.tambah_kurang_maghrib ; 
     data[waktu_isya]=data[waktu_isya]+parameter.tambah_kurang_isya ;
     data[waktu_imsya]=data[waktu_subuh]-10;
+    */
 }
 void shiftOut_cepat( uint8_t valU){
 for(byte b=0;b<8;b++){
@@ -1392,4 +1394,3 @@ void display_eprom(int add){
     }
   }
 }
-

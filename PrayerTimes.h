@@ -4,7 +4,7 @@
 
 #include "Arduino.h"
 #include <math.h>
-#include <String.h>
+#include <string.h>
 #include <WString.h>
 #include <stdio.h>
 
