@@ -11,7 +11,7 @@
 
 //====================================
 #define SERIAL_RX_BUFFER_SIZE 512
-#define bluetooth 38400              //jika hc 06 atau hc05 ganti dengan 38400
+#define bluetooth 9600  //38400              //jika hc 06 atau hc05 ganti dengan 38400
 #define runingTextSpeed 40
 #define namaBluetooth "Jws DacxtroniC"
 #define DISPLAYS_ACROSS 2
@@ -751,7 +751,7 @@ void baca_jadwal(int daerah ){
     lt = parameter.set_kota_lnt ;
     bj = parameter.set_kota_bjr ;
   }
-  get_prayer_times(data[tahun], data[bulan],data[hari], lt, bj, wkt, times);
+  get_prayer_times(data[tahun], data[bulan],data[tanggal], lt, bj, wkt, times);
   get_float_time_parts(times[0], hours, minutes);
   data[waktu_subuh]=(hours*60)+minutes;
   get_float_time_parts(times[2], hours, minutes);
@@ -767,6 +767,7 @@ void baca_jadwal(int daerah ){
   data[waktu_ashar]=data[waktu_ashar]+2;
   data[waktu_magrib]=data[waktu_magrib]+2;
   data[waktu_isya]=data[waktu_isya]+2;
+  
   data[waktu_subuh]=data[waktu_subuh]+parameter.tambah_kurang_subuh ;
   data[waktu_duhur]=data[waktu_duhur]+parameter.tambah_kurang_duhur ;
   data[waktu_ashar]=data[waktu_ashar]+parameter.tambah_kurang_ashar ; 
@@ -777,7 +778,8 @@ void baca_jadwal(int daerah ){
   if(parameter.jadwal_fix_ashar>0)data[waktu_ashar]=parameter.jadwal_fix_ashar ;
   if(parameter.jadwal_fix_maghrib>0)data[waktu_magrib] =parameter.jadwal_fix_maghrib;
   if(parameter.jadwal_fix_isya>0)data[waktu_isya] =parameter.jadwal_fix_isya;
-  data[waktu_imsya]=data[waktu_subuh]-10;
+  
+  data[waktu_imsya]=data[waktu_subuh]-10;  
 }
 void shiftOut_cepat( uint8_t valU){
 for(byte b=0;b<8;b++){
