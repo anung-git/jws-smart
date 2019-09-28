@@ -45,7 +45,8 @@ LED Panel Layout in RAM
 //SPI library must be included for the SPI scanning/connection method to the DMD
 #include "pins_arduino.h"
 #include <avr/pgmspace.h>
-//#include <SPI.h>
+
+#include <SPI.h>
 
 // ######################################################################################################################
 // ######################################################################################################################
@@ -64,33 +65,28 @@ LED Panel Layout in RAM
 #define PIN_OTHER_SPI_nCS 10
 // ######################################################################################################################
 // ######################################################################################################################
-
 //DMD I/O pin macros
 //edit anung
-/*
-#define LIGHT_DMD_ROW_00()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_01()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_02()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_03()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_04()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_05()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_06()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_07()       { digitalWrite( PIN_DMD_D,  LOW ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_08()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_09()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_10()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_11()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  LOW ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_12()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_13()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  LOW ); digitalWrite( PIN_DMD_A,  HIGH ); }
-#define LIGHT_DMD_ROW_14()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  LOW ); }
-#define LIGHT_DMD_ROW_15()       { digitalWrite( PIN_DMD_D,  HIGH ); digitalWrite( PIN_DMD_C,  HIGH ); digitalWrite( PIN_DMD_B,  HIGH ); digitalWrite( PIN_DMD_A,  HIGH ); }
-
-
-
- *   PORTB |= _BV(PB0);  //1
-  
-      PORTB &= ~_BV(PB0);  //0
- */
+//#define LIGHT_DMD_ROW_00()       { PORTF &= ~_BV(PF3); PORTF &= ~_BV(PF2); PORTF &= ~_BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_01()       { PORTF &= ~_BV(PF3); PORTF &= ~_BV(PF2); PORTF &= ~_BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_02()       { PORTF &= ~_BV(PF3); PORTF &= ~_BV(PF2); PORTF |= _BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_03()       { PORTF &= ~_BV(PF3); PORTF &= ~_BV(PF2); PORTF |= _BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_04()       { PORTF &= ~_BV(PF3); PORTF |= _BV(PF2); PORTF &= ~_BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_05()       { PORTF &= ~_BV(PF3); PORTF |= _BV(PF2); PORTF &= ~_BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_06()       { PORTF &= ~_BV(PF3); PORTF |= _BV(PF2); PORTF |= _BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_07()       { PORTF &= ~_BV(PF3); PORTF |= _BV(PF2); PORTF |= _BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_08()       { PORTF |= _BV(PF3); PORTF &= ~_BV(PF2); PORTF &= ~_BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_09()       { PORTF |= _BV(PF3); PORTF &= ~_BV(PF2); PORTF &= ~_BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_10()       { PORTF |= _BV(PF3); PORTF &= ~_BV(PF2); PORTF |= _BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_11()       { PORTF |= _BV(PF3); PORTF &= ~_BV(PF2); PORTF |= _BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_12()       { PORTF |= _BV(PF3); PORTF |= _BV(PF2); PORTF &= ~_BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_13()       { PORTF |= _BV(PF3); PORTF |= _BV(PF2); PORTF &= ~_BV(PF1); PORTF |= _BV(PF0); }
+//#define LIGHT_DMD_ROW_14()       { PORTF |= _BV(PF3); PORTF |= _BV(PF2); PORTF |= _BV(PF1);  PORTF &= ~_BV(PF0); }
+//#define LIGHT_DMD_ROW_15()       { PORTF |= _BV(PF3); PORTF |= _BV(PF2); PORTF |= _BV(PF1); PORTF |= _BV(PF0); }
+//
+//#define LATCH_DMD_SHIFT_REG_TO_OUTPUT() {PORTF |= _BV(PF4); }//PORTF &= ~_BV(PF4);}
+//#define OE_DMD_ROWS_OFF()         { PORTB |= _BV(PB6); }
+//#define OE_DMD_ROWS_ON()          { PORTB &= ~_BV(PB6); }
 
 
 
@@ -168,11 +164,9 @@ class DMD
 
   //Set or clear a pixel at the x and y location (0,0 is the top left corner)
   void writePixel( unsigned int bX, unsigned int bY, byte bGraphicsMode, byte bPixel );
-
+  void shiftOutFast( byte _val);
   //Draw a string
   void drawString( int bX, int bY, const char* bChars, int length, byte bGraphicsMode);
-
-  void shiftOutFast( byte _val);
 
   //Select a text font
   void selectFont(const uint8_t* font);
@@ -212,6 +206,7 @@ class DMD
   //Insert the calls to this function into the main loop for the highest call rate, or from a timer interrupt
   void scanDisplayBySPI();
 
+  void setBrightness(byte brightness);
 
   private:
     void drawCircleSub( int cx, int cy, int x, int y, byte bGraphicsMode );
@@ -235,6 +230,7 @@ class DMD
     byte DisplaysHigh;
     byte DisplaysTotal;
     int row1, row2, row3;
+    byte saklar=1;
 
     //scanning pointer into bDMDScreenRAM, setup init @ 48 for the first valid scan
     volatile byte bDMDByte;

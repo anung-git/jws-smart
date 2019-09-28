@@ -533,5 +533,3 @@ int DFRobotDFPlayerMini::readFileCounts(){
 int DFRobotDFPlayerMini::readCurrentFileNumber(){
   return readCurrentFileNumber(DFPLAYER_DEVICE_SD);
 }
-
-

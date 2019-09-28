@@ -38,31 +38,80 @@ DMD::DMD(byte panelsWide, byte panelsHigh){
     row3 = ((DisplaysTotal<<2)*3)<<2;
     bDMDScreenRAM = (byte *) malloc(DisplaysTotal*DMD_RAM_SIZE_BYTES);
     // initialize the SPI port
- /*   
-    SPI.begin();		// probably don't need this since it inits the port pins only, which we do just below with the appropriate DMD interface setup
-    SPI.setBitOrder(MSBFIRST);	//
-    SPI.setDataMode(SPI_MODE0);	// CPOL=0, CPHA=0
-    SPI.setClockDivider(SPI_CLOCK_DIV4);	// system clock / 4 = 4MHz SPI CLK to shift registers. If using a short cable, can put SPI_CLOCK_DIV2 here for 2x faster updates
-    digitalWrite(PIN_DMD_A, LOW);	// 
-    digitalWrite(PIN_DMD_B, LOW);	// 
-    digitalWrite(PIN_DMD_C, LOW);	// 
-    digitalWrite(PIN_DMD_D, LOW);	// 
-    digitalWrite(PIN_DMD_CLK, LOW);	// 
-    digitalWrite(PIN_DMD_SCLK, LOW);	// 
-    digitalWrite(PIN_DMD_R_DATA, HIGH);	// 
-    digitalWrite(PIN_DMD_nOE, LOW);	//
-*/
-    pinMode(PIN_DMD_A, OUTPUT);	//
-    pinMode(PIN_DMD_B, OUTPUT);	//
-    pinMode(PIN_DMD_C, OUTPUT);	//
-    pinMode(PIN_DMD_D, OUTPUT);	//
+
+//    SPI.begin();		// probably don't need this since it inits the port pins only, which we do just below with the appropriate DMD interface setup
+//    SPI.setBitOrder(MSBFIRST);	//
+//    SPI.setDataMode(SPI_MODE0);	// CPOL=0, CPHA=0
+//    SPI.setClockDivider(SPI_CLOCK_DIV2);	// system clock / 4 = 4MHz SPI CLK to shift registers. If using a short cable, can put SPI_CLOCK_DIV2 here for 2x faster updates
+// 
+//    pinMode( 13, OUTPUT);
+//    pinMode(PIN_DMD_A, OUTPUT);	//
+//    pinMode(PIN_DMD_B, OUTPUT);	//
+//    pinMode(PIN_DMD_C, OUTPUT);	//
+//    pinMode(PIN_DMD_D, OUTPUT);	//
+//    pinMode(PIN_DMD_CLK, OUTPUT);  //
+//    pinMode(PIN_DMD_SCLK, OUTPUT);  //    
+//    pinMode(PIN_DMD_R_DATA, OUTPUT);	//
+//    pinMode(PIN_DMD_nOE, OUTPUT);	//
+//
+//    digitalWrite(PIN_DMD_A, LOW);  // 
+//    digitalWrite(PIN_DMD_B, LOW); // 
+//    digitalWrite(PIN_DMD_C, LOW); // 
+//    digitalWrite(PIN_DMD_D, LOW); // 
+//    digitalWrite(PIN_DMD_CLK, LOW); // 
+//    digitalWrite(PIN_DMD_SCLK, LOW);  // 
+//    digitalWrite(PIN_DMD_R_DATA, HIGH); // 
+//    digitalWrite(PIN_DMD_nOE, LOW); //
+    pinMode(PIN_DMD_A, OUTPUT);  //
+    pinMode(PIN_DMD_B, OUTPUT); //
+    pinMode(PIN_DMD_C, OUTPUT); //
+    pinMode(PIN_DMD_D, OUTPUT); //
     pinMode(PIN_DMD_CLK, OUTPUT);  //
     pinMode(PIN_DMD_SCLK, OUTPUT);  //    
-    pinMode(PIN_DMD_R_DATA, OUTPUT);	//
-    pinMode(PIN_DMD_nOE, OUTPUT);	//
+    pinMode(PIN_DMD_R_DATA, OUTPUT);  //
+    pinMode(PIN_DMD_nOE, OUTPUT); //
     clearScreen(true);
     // init the scan line/ram pointer to the required start point
     bDMDByte = 0;
+
+
+    clearScreen(true);
+    // init the scan line/ram pointer to the required start point
+    bDMDByte = 0;
+//    TCCR1A = (1<<COM1A1)|(1<<WGM10);//(1<<WGM11)|
+//    TCCR1B = (1<<WGM12)|(1<<CS10);
+//    OCR1A = 1023;   // LED initially off
+}
+
+void DMD::setBrightness(byte brightness){
+  saklar=brightness;
+//    switch (brightness) {
+//        case 0:         
+//            OCR1A = 255;
+//            break;
+//        case 1:        
+//            OCR1A = 216;
+//            break;
+//        case 2:         
+//            OCR1A = 180;
+//            break;
+//        case 3:        
+//            OCR1A = 144;
+//            break;
+//        case 4:         
+//            OCR1A = 108;
+//            break;
+//        case 5:        
+//            OCR1A = 72;
+//            break;
+//        case 6:         
+//            OCR1A = 36;
+//            break;
+//        case 7:        
+//            OCR1A = 3;
+//            break;
+//    }
+
 }
 //DMD::~DMD()
 //{
@@ -122,7 +171,7 @@ void DMD::drawString(int bX, int bY, const char *bChars, int length,byte bGraphi
         int charWide = this->drawChar(bX+strWidth, bY, bChars[i], bGraphicsMode);
     	  if (charWide > 0) {
     	        strWidth += charWide ;
-    	        this->drawLine(bX + strWidth , bY, bX + strWidth , bY + height, GRAPHICS_INVERSE);
+              this->drawLine(bX + strWidth , bY, bX + strWidth , bY + height, GRAPHICS_INVERSE);
               strWidth++;
         } 
         else if (charWide < 0) {
@@ -379,7 +428,9 @@ void DMD::drawTestPattern(byte bPattern){
  Call 16 times to scan the whole display which is made up of 4 interleaved rows within the 16 total rows.
  Insert the calls to this function into the main loop for the highest call rate, or from a timer interrupt
 --------------------------------------------------------------------------------------*/
+
 void DMD::scanDisplayBySPI(){
+  if(saklar==0)return;
     //if PIN_OTHER_SPI_nCS is in use during a DMD scan request then scanDisplayBySPI() will exit without conflict! (and skip that scan)
    // if( digitalRead( PIN_OTHER_SPI_nCS ) == HIGH )
    //if(  HIGH ){
@@ -396,67 +447,67 @@ void DMD::scanDisplayBySPI(){
         OE_DMD_ROWS_OFF();
         LATCH_DMD_SHIFT_REG_TO_OUTPUT();
         switch (bDMDByte) {
-        case 0:			// row 1 were clocked out
+        case 0:      // row 1 were clocked out
             LIGHT_DMD_ROW_00();
             bDMDByte=1;
             break;
-        case 1:			// row 2 were clocked out
+        case 1:     // row 2 were clocked out
             LIGHT_DMD_ROW_01();
             bDMDByte=2;
             break;
-        case 2:			// row 3 were clocked out
+        case 2:     // row 3 were clocked out
             LIGHT_DMD_ROW_02();
             bDMDByte=3;
             break;
-        case 3:			// row 4 were clocked out
+        case 3:     // row 4 were clocked out
             LIGHT_DMD_ROW_03();
             bDMDByte=4;
             break;
-        case 4:			// row 5 were clocked out
+        case 4:     // row 5 were clocked out
             LIGHT_DMD_ROW_04();
             bDMDByte=5;
             break;
-        case 5:			// row 6 were clocked out
+        case 5:     // row 6 were clocked out
             LIGHT_DMD_ROW_05();
             bDMDByte=6;
             break;
-        case 6:			// row 7 were clocked out
+        case 6:     // row 7 were clocked out
             LIGHT_DMD_ROW_06();
             bDMDByte=7;
             break;
-        case 7:			// row 8 were clocked out
+        case 7:     // row 8 were clocked out
             LIGHT_DMD_ROW_07();
             bDMDByte=8;
             break;
-        case 8:			// row 9 were clocked out
+        case 8:     // row 9 were clocked out
             LIGHT_DMD_ROW_08();
             bDMDByte=9;
             break;
-        case 9:			// row 10 were clocked out
+        case 9:     // row 10 were clocked out
             LIGHT_DMD_ROW_09();
             bDMDByte=10;
             break;
-        case 10:			// row 11 were clocked out
+        case 10:      // row 11 were clocked out
             LIGHT_DMD_ROW_10();
             bDMDByte=11;
             break;
-        case 11:			// row 12 were clocked out
+        case 11:      // row 12 were clocked out
             LIGHT_DMD_ROW_11();
             bDMDByte=12;
             break;
-        case 12:			// row 13 were clocked out
+        case 12:      // row 13 were clocked out
             LIGHT_DMD_ROW_12();
             bDMDByte=13;
             break;
-        case 13:			// row 14 were clocked out
+        case 13:      // row 14 were clocked out
             LIGHT_DMD_ROW_13();
             bDMDByte=14;
             break;
-        case 14:			// row 15 were clocked out
+        case 14:      // row 15 were clocked out
             LIGHT_DMD_ROW_14();
             bDMDByte=15;
             break;
-        case 15:			// row 16 were clocked out
+        case 15:      // row 16 were clocked out
             LIGHT_DMD_ROW_15();
             bDMDByte=0;
             break;
@@ -474,6 +525,92 @@ for(byte b=0;b<8;b++){
   PORTB &= ~_BV(PB0);  //0
   }
 }
+/*
+void DMD::scanDisplayBySPI(){
+    //if PIN_OTHER_SPI_nCS is in use during a DMD scan request then scanDisplayBySPI() will exit without conflict! (and skip that scan)
+    if( digitalRead( PIN_OTHER_SPI_nCS ) == HIGH ){
+        //SPI transfer pixels to the display hardware shift registers
+        OE_DMD_ROWS_OFF();
+        int rowsize=DisplaysTotal<<2;
+        int offset=rowsize * bDMDByte;
+        for (int i=0;i<rowsize;i++) {
+            SPI.transfer(~bDMDScreenRAM[offset+i]);
+        }
+        LATCH_DMD_SHIFT_REG_TO_OUTPUT();
+        PORTF=bDMDByte;
+        if(++bDMDByte>15)bDMDByte=0;
+        // switch (bDMDByte) {
+        // case 0:			// row 1 were clocked out
+        //     LIGHT_DMD_ROW_00();
+        //     bDMDByte=1;
+        //     break;
+        // case 1:			// row 2 were clocked out
+        //     LIGHT_DMD_ROW_01();
+        //     bDMDByte=2;
+        //     break;
+        // case 2:			// row 3 were clocked out
+        //     LIGHT_DMD_ROW_02();
+        //     bDMDByte=3;
+        //     break;
+        // case 3:			// row 4 were clocked out
+        //     LIGHT_DMD_ROW_03();
+        //     bDMDByte=4;
+        //     break;
+        // case 4:			// row 5 were clocked out
+        //     LIGHT_DMD_ROW_04();
+        //     bDMDByte=5;
+        //     break;
+        // case 5:			// row 6 were clocked out
+        //     LIGHT_DMD_ROW_05();
+        //     bDMDByte=6;
+        //     break;
+        // case 6:			// row 7 were clocked out
+        //     LIGHT_DMD_ROW_06();
+        //     bDMDByte=7;
+        //     break;
+        // case 7:			// row 8 were clocked out
+        //     LIGHT_DMD_ROW_07();
+        //     bDMDByte=8;
+        //     break;
+        // case 8:			// row 9 were clocked out
+        //     LIGHT_DMD_ROW_08();
+        //     bDMDByte=9;
+        //     break;
+        // case 9:			// row 10 were clocked out
+        //     LIGHT_DMD_ROW_09();
+        //     bDMDByte=10;
+        //     break;
+        // case 10:			// row 11 were clocked out
+        //     LIGHT_DMD_ROW_10();
+        //     bDMDByte=11;
+        //     break;
+        // case 11:			// row 12 were clocked out
+        //     LIGHT_DMD_ROW_11();
+        //     bDMDByte=12;
+        //     break;
+        // case 12:			// row 13 were clocked out
+        //     LIGHT_DMD_ROW_12();
+        //     bDMDByte=13;
+        //     break;
+        // case 13:			// row 14 were clocked out
+        //     LIGHT_DMD_ROW_13();
+        //     bDMDByte=14;
+        //     break;
+        // case 14:			// row 15 were clocked out
+        //     LIGHT_DMD_ROW_14();
+        //     bDMDByte=15;
+        //     break;
+        // case 15:			// row 16 were clocked out
+        //     LIGHT_DMD_ROW_15();
+        //     bDMDByte=0;
+        //     break;
+        // }
+        //    _delay_us(1);
+        OE_DMD_ROWS_ON();
+    }
+}
+*/
+
 void DMD::selectFont(const uint8_t * font){
     this->Font = font;
 }

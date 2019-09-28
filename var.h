@@ -1,6 +1,7 @@
 
 #define set_data_segmen() { PORTA |= _BV(PA5); }
 #define clear_data_segmen() { PORTA &= ~_BV(PA5); }
+
 #define clock_data_segmen() { PORTA |= _BV(PA6); PORTA &= ~_BV(PA6);}
 
 #define set_strobe_segmen() { PORTA |= _BV(PA4); }
@@ -21,14 +22,8 @@
 
 //byte segChar[] = {1, 2, 4, 8, 16, 32, 64, 128, 255, 0}; //cek
 
-byte sqw,day;
-unsigned long previousMillis = 0;       
-unsigned long previousMillis_2 = 0;     
-unsigned long previousMillis_3 = 0;     
-#define setengah_detik  500          
-#define lima_detik  5000    
-#define lima_belas_detik  15000    
-
+byte sqw;
+unsigned long previousMillis = 0;  
 const byte data_jam[]= {136 ,238 ,73 ,76 ,46 ,28 ,24 ,206 ,8 ,12 ,255};
 const byte data_kalender []={129 ,237 ,67 ,73 ,45 ,25 ,17 ,205 ,1 ,9 ,255};
 const byte data_jadwal []={129 ,237 ,67 ,73 ,45 ,25 ,17 ,205 ,1 ,9 ,255};
@@ -45,7 +40,6 @@ volatile static byte commad;
 #define text_iq_jumat 600
 #define text_run 700
 
-#define command_end 0
 #define command_start 1
 #define set_jam 2
 #define set_text 3
@@ -54,10 +48,13 @@ volatile static byte commad;
 #define set_brightnes 6
 #define set_offsite 7
 #define set_fix 8
-#define set_kota 9
+#define set_bt_kota 9
 #define set_adzan 10
 #define play_mp3 11
+#define command_end 12
 volatile static byte command;
+
+
 
 struct MyObject{
     int  kota;
@@ -140,30 +137,25 @@ struct MyObject{
 #define sabtu 6
 #define ahad 7
 #define alarm_beep 8
-
 #define on 9
 #define off 10
-
 #define imsya 11
 #define subuh 12
 #define duhur 13
 #define ashar 14
 #define magrib 15
 #define isya 16
-
 #define stanbay 17
 #define iqomah 18
-#define tambah 20
-#define kurang 21
-#define set_kota 22
-#define jadwal 23
-#define tlwh_1 24
-#define tlwh_2 25
-#define tlwh_3 26
-#define tlwh_4 27
-#define tlwh_5 28
-#define tlwh_6 29
-#define kutbah 30
+#define set_kota 19
+#define jadwal 20
+#define tlwh_1 21
+#define tlwh_2 22
+#define tlwh_3 23
+#define tlwh_4 24
+#define tlwh_5 25
+#define tlwh_6 26
+#define kutbah 27
 
 
 #define ka   65
@@ -191,6 +183,38 @@ struct MyObject{
 #define kw1  177
 #define kw2  225
 #define k_   255
+
+const PROGMEM  uint8_t dataKalender []={
+  k_,ks,ke,kn,ki,kn,k_,k_,
+  k_,ks,ke,kl,ka,ks,ka,k_,
+  k_,k_,kr,ka,kb,ku,k_,k_,
+  k_,kk,ka,km1,km2,ki,ks,k_,
+  k_,kj,ku,km1,km2,ka,kt,k_,
+  k_,ks,ka,kb,kt,ku,k_,k_,
+  k_,k_,ka,kh,ka,kd,k_,k_,
+  k_,ka,kl,ka,kr,km1,km2,k_,
+  k_,k_,k_,ko,kn,k_,k_,k_,
+  k_,k_,k_,ko,kf,kf,k_,k_,
+  k_,ki,km1,km2,ks,ky,ka,k_,
+  k_,k_,ks,ku,kb,ku,kh,k_,
+  k_,k_,kd,ku,kh,ku,kr,k_,
+  k_,k_,ka,ks,kh,ka,kr,k_,
+  km1,km2,ka,kg,kh,kr,ki,kb,
+  k_,k_,ki,ks,ky,ka,k_,k_,
+  k_,ks,kt,ka,kn,kb,ky,k_,
+  ki,kq,ko,km1,km2,ka,kh,k_,
+  k_,k_,kk,ko,kt,ka,k_,k_,
+  k_,kj,ka,kd,kw1,kw2,ka,kl,
+  kt,ka,kr,kt,ki,kl,k_,data_kalender[1],
+  kt,ka,kr,kt,ki,kl,k_,data_kalender[2],
+  kt,ka,kr,kt,ki,kl,k_,data_kalender[3],
+  kt,ka,kr,kt,ki,kl,k_,data_kalender[4],
+  kt,ka,kr,kt,ki,kl,k_,data_kalender[5],
+  kt,ka,kr,kt,ki,kl,k_,data_kalender[6],
+  kk,kh,ku,kt,kb,ka,kh,k_,
+  k_,k_,k_,k_,k_,k_,k_,k_,
+};
+
 int data[20];
 
 volatile unsigned char segmen[36];
