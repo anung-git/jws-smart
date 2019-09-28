@@ -81,7 +81,6 @@ void setup() {
   myDFPlayer.volume(25);  //Set volume . From 0 to 30
   myDFPlayer.play(1);  //Play the first mp3
   display_eprom(text_run);
-  Serial.println("start");
 }
 unsigned char temp_min, temp_jam, temp_hri, rename_bt=0,limaDetik;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
