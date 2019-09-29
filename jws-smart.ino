@@ -232,35 +232,34 @@ for (int t=0;t<420;t++){
   char chr = pgm_read_byte_near(runningtext+t); 
   EEPROM.write(text_run+t,chr);
 }
-int i;
-for(i=0;i<20;i++){
-  char chr = pgm_read_byte_near(textsholat_sb+i); 
-  EEPROM.write(text_iq_subuh+i,chr);  
+for(int n=0;n<20;n++){//for(i=0;i<20;i++){
+  char chr = pgm_read_byte_near(textsholat_sb+n); 
+  EEPROM.write(text_iq_subuh+n,chr);  
   }
   
-for(i=0;i<21;i++){
-  char chr = pgm_read_byte_near(textsholat_dh+i); 
-  EEPROM.write(text_iq_duhur+i,chr);  
+for(int n=0;n<21;n++){//for(i=0;i<21;i++){
+  char chr = pgm_read_byte_near(textsholat_dh+n); 
+  EEPROM.write(text_iq_duhur+n,chr);  
   }
   
-for(i=0;i<20;i++){
-  char chr = pgm_read_byte_near(textsholat_as+i); 
-  EEPROM.write(text_iq_ashar+i,chr);  
+for(int n=0;n<20;n++){//for(i=0;i<20;i++){
+  char chr = pgm_read_byte_near(textsholat_as+n); 
+  EEPROM.write(text_iq_ashar+n,chr);  
   }
   
-for(i=0;i<22;i++){
-  char chr = pgm_read_byte_near(textsholat_mg+i); 
-  EEPROM.write(text_iq_maghrib+i,chr);  
+for(int n=0;n<22;n++){//for(i=0;i<22;i++){
+  char chr = pgm_read_byte_near(textsholat_mg+n); 
+  EEPROM.write(text_iq_maghrib+n,chr);  
   }
   
-for(i=0;i<19;i++){
-  char chr = pgm_read_byte_near(textsholat_is+i); 
-  EEPROM.write(text_iq_isya+i,chr);  
+for(int n=0;n<19;n++){//for(int i=0;i<19;i++){ 
+  char chr = pgm_read_byte_near(textsholat_is+n); 
+  EEPROM.write(text_iq_isya+n,chr);  
   }
   
-for(i=0;i<70;i++){
-  char chr = pgm_read_byte_near(textsholat_jm+i); 
-  EEPROM.write(text_iq_jumat+i,chr);  
+for(int n=0;n<70;n++){//for(i=0;i<70;i++){
+  char chr = pgm_read_byte_near(textsholat_jm+n); 
+  EEPROM.write(text_iq_jumat+n,chr);  
   }
 
 }
@@ -1100,6 +1099,7 @@ void serialEvent1() {
       if(input_serial[1] == 'N') parameter.set_kota_lnt =((input_serial[7]-'0')*100)+((input_serial[8]-'0')*10)+(input_serial[9]-'0')+((input_serial[10]-'0')*0.1)+((input_serial[11]-'0')*0.01)  ;
       if(input_serial[1] == 'S')parameter.set_kota_lnt =0-(((input_serial[7]-'0')*100)+((input_serial[8]-'0')*10)+(input_serial[9]-'0')+((input_serial[10]-'0')*0.1)+((input_serial[11]-'0')*0.01))  ;
       parameter.set_kota_gmt=input_serial[16]-'0' ;
+      parameter.kota = 0;
       EEPROM.put( 0, parameter );
       Serial1.print("SetKoor\n");
       command=command_end;
