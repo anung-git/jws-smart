@@ -568,7 +568,8 @@ void alarm(void){
   if(waktu_alaram == data[waktu_isya])alarm_on(waktu_isya);
 }
 const PROGMEM  byte jadwaloff []={//segmen yang mati
-16,17,18,19,
+//16,17,18,19,
+12,13,14,15,  
 20,21,22,23,
 24,25,26,27,
 28,29,30,31,
@@ -760,6 +761,13 @@ void baca_jadwal(int daerah ){
   data[waktu_magrib]=(hours*60)+minutes;
   get_float_time_parts(times[6], hours, minutes);
   data[waktu_isya]=(hours*60)+minutes;
+
+
+
+  get_float_time_parts(times[1], hours, minutes);
+  data[waktu_imsya]=(hours*60)+minutes; 
+
+  data[waktu_imsya]+=2;
   data[waktu_subuh]=data[waktu_subuh]+2;
   data[waktu_duhur]=data[waktu_duhur]+2;
   data[waktu_ashar]=data[waktu_ashar]+2;
@@ -777,7 +785,6 @@ void baca_jadwal(int daerah ){
   if(parameter.jadwal_fix_maghrib>0)data[waktu_magrib] =parameter.jadwal_fix_maghrib;
   if(parameter.jadwal_fix_isya>0)data[waktu_isya] =parameter.jadwal_fix_isya;
   
-  data[waktu_imsya]=data[waktu_subuh]-10;  
 }
 void shiftOut_cepat( uint8_t valU){
 for(byte b=0;b<8;b++){
@@ -832,14 +839,14 @@ void refres(byte mode){
       r=r+4;
     }
 
-    // segmen[12]=(data_jadwal[(data[waktu_imsya]/60)/10]);
-    // segmen[13]=(data_jadwal[(data[waktu_imsya]/60)%10]);
-    // segmen[14]=(data_jadwal[(data[waktu_imsya]%60)/10]);
-    // segmen[15]=(data_jadwal[(data[waktu_imsya]%60)%10]);
-    // segmen[16]=(data_jadwal[(data[waktu_subuh]/60)/10]);
-    // segmen[17]=(data_jadwal[(data[waktu_subuh]/60)%10]);
-    // segmen[18]=(data_jadwal[(data[waktu_subuh]%60)/10]);
-    // segmen[19]=(data_jadwal[(data[waktu_subuh]%60)%10]);
+    segmen[12]=(data_jadwal[(data[waktu_subuh]/60)/10]);
+    segmen[13]=(data_jadwal[(data[waktu_subuh]/60)%10]);
+    segmen[14]=(data_jadwal[(data[waktu_subuh]%60)/10]);
+    segmen[15]=(data_jadwal[(data[waktu_subuh]%60)%10]);
+    segmen[16]=(data_jadwal[(data[waktu_imsya]/60)/10]);
+    segmen[17]=(data_jadwal[(data[waktu_imsya]/60)%10]);
+    segmen[18]=(data_jadwal[(data[waktu_imsya]%60)/10]);
+    segmen[19]=(data_jadwal[(data[waktu_imsya]%60)%10]);
     // segmen[20]=(data_jadwal[(data[waktu_duhur]/60)/10]);
     // segmen[21]=(data_jadwal[(data[waktu_duhur]/60)%10]);
     // segmen[22]=(data_jadwal[(data[waktu_duhur]%60)/10]);
