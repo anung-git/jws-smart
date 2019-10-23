@@ -196,7 +196,7 @@ const PROGMEM  uint8_t dataKalender []={
   k_,k_,k_,ko,kn,k_,k_,k_,
   k_,k_,k_,ko,kf,kf,k_,k_,
   k_,k_,ks,ku,kb,ku,kh,k_,
-  k_,ks,ku,kr,ku,kq,k_,k_,
+  k_,kt,ke,kr,kb,ki,kt,k_,
   k_,k_,kd,ku,kh,ku,kr,k_,
   k_,k_,ka,ks,kh,ka,kr,k_,
   km1,km2,ka,kg,kh,kr,ki,kb,
