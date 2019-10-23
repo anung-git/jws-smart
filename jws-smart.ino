@@ -548,7 +548,7 @@ void alarm(void){
   if(waktu_alaram == data[waktu_isya]-parameter.tartil_isya&&parameter.tartil_isya>0)myDFPlayer.randomAll(); //Random play all the mp3.  
   
   if(waktu_alaram == data[waktu_imsya]){
-      tampil_hari(imsya+1);
+      tampil_hari(imsya);
       unsigned long currentMillis=millis()+60000;
       while(millis()<currentMillis){      
           tampil_segmen();
